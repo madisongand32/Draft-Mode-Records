@@ -1,0 +1,57 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import "./globals.css";
+import "./styles/index.css";
+import { Calistoga, IBM_Plex_Sans } from "next/font/google";
+
+// Font Families
+const calistoga = Calistoga({ weight: "400", subsets: ["latin"] });
+const ibmPlex = IBM_Plex_Sans({ weight: ["400", "600"], subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "Draft Mode Records",
+  description:
+    "A mock record label website for the Content Authoring Accelerator workshop.",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Header />
+        <main className={`${ibmPlex.className}`}>{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}
+
+function Header() {
+  return (
+    <header className="py-10 text-center">
+      <div className="flex gap-5 justify-end align-center">
+        <Link href="/">Home</Link>
+      </div>
+      <h1 className={`${calistoga.className} text-8xl`}>Draft Mode Records</h1>
+    </header>
+  );
+}
+
+function Footer() {
+  const currentYear = new Date().getFullYear();
+  return (
+    <footer
+      style={{
+        backgroundColor: "#f8f9fa",
+        padding: "10px",
+        textAlign: "center",
+      }}
+    >
+      <p>&copy; {currentYear} Contentful. All rights reserved.</p>
+    </footer>
+  );
+}
