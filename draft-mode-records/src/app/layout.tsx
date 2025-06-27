@@ -21,9 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body>
         <Header />
-        <main className={`${ibmPlex.className}`}>{children}</main>
+        <main className={`min-h-screen px-10 ${ibmPlex.className}`}>
+          {children}
+        </main>
         <Footer />
       </body>
     </html>
@@ -32,9 +37,11 @@ export default function RootLayout({
 
 function Header() {
   return (
-    <header className="py-10 text-center">
+    <header className="p-10 text-center">
       <div className="flex gap-5 justify-end align-center">
-        <Link href="/">Home</Link>
+        <Link href="/artist">Artists</Link>
+        <Link href="/album">Albums</Link>
+        <Link href="#">Spotify</Link>
       </div>
       <h1 className={`${calistoga.className} text-8xl`}>Draft Mode Records</h1>
     </header>

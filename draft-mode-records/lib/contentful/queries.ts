@@ -6,49 +6,80 @@ const INCLUDES_COUNT = 5;
 
 export type HeroSize = "small" | "medium" | "large" | "fullScreen";
 
-export type HeroBanner = {
-  contentTypeId: "heroBanner";
-  fields: {
-    internalName: contentful.EntryFields.Symbol;
-    headline: contentful.EntryFields.Symbol;
-    bodyText: contentful.EntryFields.Symbol;
-    backgroundImage: contentful.EntryFields.AssetLink;
-    heroSize: HeroSize;
-  };
-};
+// export type HeroBanner = {
+//   contentTypeId: "heroBanner";
+//   fields: {
+//     internalName: contentful.EntryFields.Symbol;
+//     headline: contentful.EntryFields.Symbol;
+//     bodyText: contentful.EntryFields.Symbol;
+//     backgroundImage: contentful.EntryFields.AssetLink;
+//     heroSize: HeroSize;
+//   };
+// };
 
-export type PageEntry = {
-  contentTypeId: "pageContent";
-  fields: {
-    // internalName: contentful.EntryFieldTypes.Text;
-    internalName: contentful.EntryFields.Symbol;
-    pageTitle: contentful.EntryFields.Symbol;
-    slug: contentful.EntryFields.Symbol;
-    // seoMetadata?: contentful.EntryFields.Array<
-    //   contentful.EntryFields.EntryLink<
-    //     HeroBannerSkeleton | DuplexSectionSkeleton
-    //   >
-    // >;
-    sections?: contentful.EntryFields.Array<
-      contentful.EntryFields.EntryLink<HeroBanner>
-    >;
-  };
-};
+// export type PageEntry = {
+//   contentTypeId: "pageContent";
+//   fields: {
+//     // internalName: contentful.EntryFieldTypes.Text;
+//     internalName: contentful.EntryFields.Symbol;
+//     pageTitle: contentful.EntryFields.Symbol;
+//     slug: contentful.EntryFields.Symbol;
+//     // seoMetadata?: contentful.EntryFields.Array<
+//     //   contentful.EntryFields.EntryLink<
+//     //     HeroBannerSkeleton | DuplexSectionSkeleton
+//     //   >
+//     // >;
+//     sections?: contentful.EntryFields.Array<
+//       contentful.EntryFields.EntryLink<HeroBanner>
+//     >;
+//   };
+// };
 
-export interface PageFields {
-  title: string;
-  slug: string;
-  // pageType: string;
-  // seo?: any;
-  sections: PageEntry["fields"]["sections"] | undefined;
-  hero?: HeroBanner | undefined;
-}
+// export interface PageFields {
+//   title: string;
+//   slug: string;
+//   // pageType: string;
+//   // seo?: any;
+//   sections: PageEntry["fields"]["sections"] | undefined;
+//   hero?: HeroBanner | undefined;
+// }
 
-export interface IPageEntry extends PageFields {
-  sys?: any;
-}
+// export interface IPageEntry extends PageFields {
+//   sys?: any;
+// }
 
 //New content for record label
+
+export interface AssetWrapper {
+  sys: { id: string };
+  fields: {
+    media: {
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    };
+  };
+}
+
+export interface Artist {
+  sys: { id: string };
+  fields: {
+    artistName: string;
+    // Add more artist fields as needed
+  };
+}
+
+// AlbumFields type
+export interface AlbumFields {
+  internalName: string;
+  albumName: string;
+  albumCover: AssetWrapper;
+  artist: Artist;
+  releaseDate: number;
+  isAlbumOfTheMonth?: boolean;
+}
 
 export const fetchArtist = async ({
   slug,
@@ -107,12 +138,12 @@ export const fetchAllAlbums = async (preview = false) => {
   }
 };
 
-export const fetchPages = async () => {
-  return getClient().getEntries<PageEntry>({
-    content_type: "pageContent",
-    include: INCLUDES_COUNT,
-  });
-};
+// export const fetchPages = async () => {
+//   return getClient().getEntries<PageEntry>({
+//     content_type: "pageContent",
+//     include: INCLUDES_COUNT,
+//   });
+// };
 
 export const fetchPageWithSlug = async ({
   slug,
