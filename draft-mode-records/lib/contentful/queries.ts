@@ -1,5 +1,4 @@
 import { getClient } from "./client";
-import * as contentful from "contentful";
 
 const CONTENT_TYPE_NAME = "pageContent";
 const INCLUDES_COUNT = 5;
