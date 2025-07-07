@@ -1,11 +1,8 @@
 import { fetchAlbum } from "../../../../lib/contentful/queries";
 import Image from "next/image";
 
-export default async function AlbumPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function AlbumPage(props: { params: { slug: string } }) {
+  const params = await props.params;
   const album = await fetchAlbum({ slug: params.slug });
 
   if (!album) {

@@ -1,4 +1,6 @@
 import { getClient } from "./client";
+import * as contentful from "contentful";
+// import { Entry } from "contentful";
 
 const CONTENT_TYPE_NAME = "pageContent";
 const INCLUDES_COUNT = 5;
@@ -51,33 +53,32 @@ export type HeroSize = "small" | "medium" | "large" | "fullScreen";
 
 export interface AssetWrapper {
   sys: { id: string };
+  contentTypeId: "assetWrapper";
   fields: {
-    media: {
-      fields: {
-        file: {
-          url: string;
-        };
-      };
-    };
+    media: contentful.EntryFields.AssetLink;
+    altText?: contentful.EntryFields.Symbol;
   };
 }
 
 export interface Artist {
   sys: { id: string };
+  contentTypeId: "artist";
   fields: {
-    artistName: string;
+    artistName: contentful.EntryFields.Symbol;
+    artistImage: AssetWrapper;
+    bio: contentful.EntryFields.Symbol;
     // Add more artist fields as needed
   };
 }
 
 // AlbumFields type
 export interface AlbumFields {
-  internalName: string;
-  albumName: string;
+  internalName: contentful.EntryFields.Symbol;
+  albumName: contentful.EntryFields.Symbol;
   albumCover: AssetWrapper;
   artist: Artist;
-  releaseDate: number;
-  isAlbumOfTheMonth?: boolean;
+  releaseDate: contentful.EntryFields.Integer;
+  isAlbumOfTheMonth?: contentful.EntryFields.Boolean;
 }
 
 export const fetchArtist = async ({
@@ -118,7 +119,9 @@ export const fetchAlbum = async ({
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9\-]/g, "");
     return response.items.find(
-      (item: any) => slugify(item.fields.albumName) === slug
+      (item) =>
+        !!item.fields.albumName &&
+        slugify(String(item.fields.albumName)) === slug
     );
   } catch {
     return null;

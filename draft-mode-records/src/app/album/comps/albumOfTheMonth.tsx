@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default async function AlbumOfTheMonth() {
   const albums = await fetchAllAlbums();
-  const album = albums.find((a: any) => a.fields.isAlbumOfTheMonth === true);
+  const album = albums.find((a) => a.fields.isAlbumOfTheMonth === true);
 
   const slugify = (name: string) =>
     name

@@ -18,7 +18,7 @@ export default async function Albums({ limit }: AlbumsProps) {
 
   return (
     <>
-      {displayedAlbums.map((album: any) => (
+      {displayedAlbums.map((album) => (
         <div
           key={album.sys.id}
           className="w-1/3 flex flex-col items-start justify-end mr-3"
