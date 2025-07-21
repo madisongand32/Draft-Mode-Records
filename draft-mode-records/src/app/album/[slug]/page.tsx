@@ -9,23 +9,21 @@ import Image from "next/image";
 export default async function AlbumPage(props: { params: { slug: string } }) {
   const params = await props.params;
   const album = await fetchAlbum({ slug: params.slug });
+  const albumName = album?.fields.albumName;
 
   // Get the artist reference from the album
-  const artistRef = album?.fields.artist[0];
+  const artistRef = album?.fields.artist as Entry<Artist> | undefined;
+  const artistName = artistRef?.fields?.artistName;
+
   // Fetch the full artist entry using fetchArtist (by name)
-  // @ts-ignore
-
   const artistEntry = artistRef as Entry<Artist>;
-
-  const artist = artistEntry?.fields?.artistName
-    ? await fetchArtist({ slug: artistEntry.fields.artistName as string })
-    : null;
-  // artistImage is now resolved if artist exists
+  const artist =
+    artistEntry && typeof artistName === "string"
+      ? await fetchArtist({ slug: artistName })
+      : null;
   const artistImage = artist?.fields?.artistImage;
 
-  console.log(album);
-
-  if (!album) {
+  if (!album || !artist) {
     return (
       <main className="min-h-screen flex items-center justify-center">
         Album not found.
@@ -37,14 +35,12 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
     <main className="min-h-screen">
       <section className="-mx-10">
         <div className="w-full h-full relative">
-          {artistImage?.fields?.media?.fields?.file?.url && (
-            <Image
-              src={`https:${artistImage.fields.media.fields.file.url}`}
-              alt={album.fields.albumName as string}
-              fill
-              className="!h-[75vh] !w-full object-cover !relative"
-            />
-          )}
+          <Image
+            src={`https:${artistImage.fields?.media.fields.file.url}`}
+            alt={albumName as string}
+            fill
+            className="!h-[75vh] !w-full object-cover !relative"
+          />{" "}
         </div>
       </section>
       <section className="bg-vinylDark text-white px-10 -mx-10 py-20 flex flex-col items-center gap-4">
@@ -67,7 +63,7 @@ export default async function AlbumPage(props: { params: { slug: string } }) {
           <div className="w-full md:w-1/2">
             <h3>{album.fields.albumName as string}</h3>
             <h4 className="text-sm">
-              {artist?.fields?.artistName as string} /{" "}
+              {artistName} /{" "}
               {new Date(album.fields.releaseDate as number).getFullYear()}
             </h4>
           </div>
