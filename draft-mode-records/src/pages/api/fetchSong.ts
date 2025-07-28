@@ -70,7 +70,7 @@ export default async function handler(
   const token = await getSpotifyToken();
 
   const searchRes = await fetch(
-    `https://api.spotify.com/v1/search?type=album&limit=10&q=${encodeURIComponent(
+    `https://api.spotify.com/v1/search?type=track&limit=10&q=${encodeURIComponent(
       q
     )}`,
     {
@@ -87,5 +87,5 @@ export default async function handler(
   }
 
   const data = await searchRes.json();
-  res.status(200).json(data.albums); // Return just playlists part
+  res.status(200).json(data.tracks); // Return tracks
 }
