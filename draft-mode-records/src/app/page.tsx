@@ -9,7 +9,7 @@ export default async function HomePage() {
       </section>
       <section>
         <h2 className="text-2xl mb-10">Our Latest Records</h2>
-        <div className="home-album-collection flex flex-row gap-3">
+        <div className="home-album-collection flex flex-row gap-3 mb-10">
           <Albums limit={9} />
         </div>
       </section>

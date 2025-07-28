@@ -43,7 +43,9 @@ function Header() {
         <Link href="/album">Albums</Link>
         <Link href="#">Spotify</Link>
       </div>
-      <h1 className={`${calistoga.className} text-8xl`}>Draft Mode Records</h1>
+      <h1 className={`${calistoga.className} text-8xl mt-5`}>
+        <Link href="/">Draft Mode Records</Link>
+      </h1>
     </header>
   );
 }

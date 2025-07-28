@@ -2,13 +2,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchAllAlbums } from "../../../../lib/contentful/queries";
 
-interface AlbumsProps {
-  limit?: number;
-}
-
-export default async function Albums({ limit }: AlbumsProps) {
+export default async function Albums({ limit }) {
   const albums = await fetchAllAlbums();
-  const slugify = (name: string) =>
+  const slugify = (name) =>
     name
       .toLowerCase()
       .replace(/\s+/g, "-")
@@ -33,14 +29,17 @@ export default async function Albums({ limit }: AlbumsProps) {
               style={{ right: "-15%", left: "auto" }} // offset to the right
               priority
             />
+
             <div className="absolute inset-0 w-[90%] h-[90%] flex items-start justify-start z-10">
-              <Image
-                src={`https:${album.fields.albumCover?.fields?.media.fields?.file?.url}`}
-                alt={album.fields.albumName}
-                fill
-                className="object-contain rounded shadow"
-                priority
-              />
+              <Link href={`/album/${slugify(album.fields.albumName)}`}>
+                <Image
+                  src={`https:${album.fields.albumCover?.fields?.media.fields?.file?.url}`}
+                  alt={album.fields.albumName}
+                  fill
+                  className="object-contain rounded shadow"
+                  priority
+                />
+              </Link>
             </div>
           </div>
           <strong>{album.fields.albumName}</strong>

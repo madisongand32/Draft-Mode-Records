@@ -7,7 +7,7 @@ export default async function AlbumOfTheMonth() {
   const albums = await fetchAllAlbums();
   const album = albums.find((a) => a.fields.isAlbumOfTheMonth === true);
 
-  const slugify = (name: string) =>
+  const slugify = (name) =>
     name
       .toLowerCase()
       .replace(/\s+/g, "-")
@@ -29,24 +29,22 @@ export default async function AlbumOfTheMonth() {
         <div className="w-full md:w-1/3 flex flex-col gap-6">
           <div>
             <h3 className="font-semibold text-2xl md:text-3xl">
-              {album.fields?.artist?.fields?.artistName as string} /{" "}
-              {album.fields?.releaseDate as string}
+              {album.fields?.artist?.fields?.artistName} /{" "}
+              {album.fields?.releaseDate}
             </h3>
           </div>
           <div className="h-[1px] w-full bg-vinylOrange" />
-          <h4 className="text-xl md:text-2xl">
-            {album.fields?.albumName as string}
-          </h4>
+          <h4 className="text-xl md:text-2xl">{album.fields?.albumName}</h4>
           <div className="h-[1px] w-full bg-vinylOrange" />
           <p className="text-sm font-thin">
-            {album.fields?.artist?.fields?.bio as string}
+            {album.fields?.artist?.fields?.bio}
           </p>
           <div>
             <a
               href={`/album/${album.fields.albumName
                 .toLowerCase()
                 .replace(/\s+/g, "-")
-                .replace(/[^a-z0-9\-]/g, "")}`}
+                .replace(/[^a-z0-9\-]/g, "")}#songsInPlayer`}
               className="flex text-xs flex-row items-center justify-start gap-2"
             >
               <p>Listen to the preview</p>{" "}
@@ -63,14 +61,14 @@ export default async function AlbumOfTheMonth() {
               </Link>
             </div>
             <div className="w-full">
-              <Link
+              {/* <Link
                 className="bg-vinylNeutral text-sm lg:text-base font-semibold px-6 py-4 rounded-full w-full block text-center"
                 href={`/artist/${slugify(
                   album.fields.artist.fields?.artistName
                 )}`}
               >
                 View the Artist
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>

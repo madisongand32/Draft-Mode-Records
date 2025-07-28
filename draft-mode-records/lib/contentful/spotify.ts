@@ -16,14 +16,11 @@ export const getSpotifyToken = async () => {
   return data.access_token;
 };
 
-export const getPlaylistData = async (playlistId: string) => {
+export const getSongData = async (songId: string) => {
   const token = await getSpotifyToken();
-  const res = await fetch(
-    `https://api.spotify.com/v1/playlists/${playlistId}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-  if (!res.ok) throw new Error("Failed to fetch playlist");
+  const res = await fetch(`https://api.spotify.com/v1/tracks/${songId}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Failed to fetch song");
   return await res.json();
 };

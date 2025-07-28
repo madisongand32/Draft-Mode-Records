@@ -1,18 +1,49 @@
 import { getClient } from "./client";
 import * as contentful from "contentful";
-import { Entry, EntrySkeletonType, EntrySys } from "contentful";
+import { Entry, EntrySkeletonType, EntrySys, EntryFields } from "contentful";
 
-// to update when content type exists
-export interface HeroBanner extends EntrySkeletonType {
-  sys: EntrySys;
+export type EntryReference = {
+  sys: {
+    id: string;
+    linkType: "Entry";
+    type: "Link";
+  };
+};
+
+export type BackgroundColor = "vinylDark" | "vinylOrange" | "vinylNeutral";
+
+interface DuplexComponentFields {
+  contentTypeId: "duplexComponent";
   fields: {
-    headline: string;
-    subline: string;
-    size: string;
-    style: string;
-    image: AssetWrapper;
+    featuredArtist: Artist;
+    artistFeatureImage: AssetWrapper;
+    imageAlignment: boolean;
+    backgroundColor: BackgroundColor;
   };
 }
+
+export type DuplexComponentProps = Entry<DuplexComponentFields>;
+
+interface FeaturedAlbumFields {
+  contentTypeId: "featuredAlbum";
+  fields: {
+    albumToFeature: Album;
+    songToShow: contentful.EntryFields.Integer;
+    imageAlignment: boolean;
+  };
+}
+
+export type FeaturedAlbumProps = Entry<FeaturedAlbumFields>;
+
+interface ArtistFields {
+  contentTypeId: "artist";
+  fields: {
+    artistName: string;
+    artistImage: AssetWrapper;
+    bio?: string;
+  };
+}
+export type Artist = Entry<ArtistFields>;
 
 export interface ContentfulAsset {
   metadata: {
@@ -57,54 +88,51 @@ export interface ContentfulAsset {
   };
 }
 
-export interface AssetWrapperFields {
-  altText: string;
-  publishedDate?: string;
-  media?: ContentfulAsset;
-}
-
-export interface AssetWrapper extends EntrySkeletonType {
-  sys: EntrySys;
-  fields: AssetWrapperFields;
-}
-
-export interface Artist extends EntrySkeletonType {
-  sys: EntrySys;
-  contentTypeId: "artist";
+interface AssetWrapperFields {
+  contentTypeId: "assetWrapper";
   fields: {
-    artistName: string;
-    artistImage: AssetWrapper;
-    bio: string; // Localized field
+    altText: string;
+    publishedDate?: string;
+    media?: ContentfulAsset;
   };
 }
+
+export type AssetWrapper = Entry<AssetWrapperFields>;
 
 export interface SpotifyPlayer {
   id: string;
   name: string;
-  images: { url: string }[];
   artists: { name: string }[];
+  album: {
+    name: string;
+    images: { url: string }[];
+  };
 }
 
-export interface Album extends EntrySkeletonType {
-  sys: EntrySys;
+interface AlbumFields {
+  contentTypeId: "album";
   fields: {
     albumName: string; // Localized field
     albumCover: AssetWrapper;
     artist: Artist;
+    songsInAlbum: Song[];
     releaseDate: contentful.EntryFields.Integer;
-    spotifyPlayer?: SpotifyPlayer;
     isAlbumOfTheMonth?: contentful.EntryFields.Boolean;
   };
 }
 
-export interface Song extends EntrySkeletonType {
-  sys: EntrySys;
+export type Album = Entry<AlbumFields>;
+
+interface SongField {
+  contentTypeId: "song";
   fields: {
-    title: string;
-    spotifyLink: string;
-    artists: Artist[];
+    songTitle: string;
+    spotifyPlayer?: SpotifyPlayer;
+    artists: Artist;
   };
 }
+
+export type Song = Entry<SongField>;
 
 export const fetchArtist = async ({
   slug,
@@ -112,11 +140,65 @@ export const fetchArtist = async ({
 }: {
   slug: string;
   preview?: boolean;
-}) => {
+}): Promise<Entry<ArtistFields> | undefined> => {
+  try {
+    const response = await getClient(preview).getEntries<ArtistFields>({
+      content_type: "artist",
+    });
+    const slugify = (name: string) =>
+      name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9\-]/g, "");
+    return response.items.find(
+      (item) =>
+        !!item.fields.artistName &&
+        slugify(String(item.fields.artistName)) === slug
+    );
+  } catch {
+    return;
+  }
+};
+
+interface ArtistPageFields {
+  contentTypeId: "artistPage";
+  fields: {
+    slug: string;
+    artist: Artist;
+    sections: Array<unknown>;
+  };
+}
+export type ArtistPage = Entry<ArtistPageFields>;
+
+interface DuplexFields {
+  contentTypeId: "duplexComponent";
+  fields: {
+    featuredArtist?: Artist | EntryReference;
+    artistFeatureImage?: AssetWrapper | EntryReference;
+    imageAlignment?: EntryFields.Boolean;
+    backgroundColor?: BackgroundColor;
+  };
+}
+
+export type DuplexProps = Entry<DuplexFields>;
+
+export const fetchAllArtistPages = async (preview = false) => {
   try {
     const response = await getClient(preview).getEntries({
-      content_type: "artist",
-      "fields.artistName": slug,
+      content_type: "artistPage",
+    });
+    return response.items;
+  } catch {
+    return [];
+  }
+};
+
+export const fetchArtistPageBySlug = async ({ slug, preview = false }) => {
+  try {
+    const response = await getClient(preview).getEntries({
+      content_type: "artistPage",
+      "fields.slug": slug,
+      include: 3,
     });
     return response.items?.[0];
   } catch {
@@ -130,10 +212,11 @@ export const fetchAlbum = async ({
 }: {
   slug: string;
   preview?: boolean;
-}): Promise<Entry<Album> | undefined> => {
+}): Promise<Entry<AlbumFields> | undefined> => {
   try {
-    const response = await getClient(preview).getEntries<Album>({
+    const response = await getClient(preview).getEntries<AlbumFields>({
       content_type: "album",
+      include: 3,
     });
     const slugify = (name: string) =>
       name
@@ -168,17 +251,36 @@ export const fetchAllAlbums = async (preview = false) => {
 //   });
 // };
 
-export const fetchPageWithSlug = async ({
-  slug,
+// export const fetchPageWithSlug = async ({
+//   slug,
+//   preview = false,
+// }: {
+//   slug: string;
+//   preview?: boolean;
+// }) => {
+//   try {
+//     const response = await getClient(preview).getEntries({
+//       content_type: "artistPage", // edit with artist page content type
+//       "fields.slug": slug,
+//     });
+//     return response.items?.[0];
+//   } catch {
+//     return null;
+//   }
+// };
+
+export const fetchArtistPageByArtistId = async ({
+  artistId,
   preview = false,
 }: {
-  slug: string;
+  artistId: string;
   preview?: boolean;
 }) => {
   try {
     const response = await getClient(preview).getEntries({
-      content_type: "artistPage", // edit with artist page content type
-      "fields.slug": slug,
+      content_type: "artistPage",
+      "fields.artist.sys.id": artistId,
+      include: 3,
     });
     return response.items?.[0];
   } catch {
