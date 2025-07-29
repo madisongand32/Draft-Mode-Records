@@ -1,14 +1,7 @@
-import Link from "next/link";
-import Image from "next/image";
 import { fetchAllArtistPages } from "../../../lib/contentful/queries";
 
 export default async function ArtistPage() {
   const artistPages = await fetchAllArtistPages();
-  const slugify = (name) =>
-    name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9\-]/g, "");
 
   console.log("Artist Pages:", artistPages);
 
