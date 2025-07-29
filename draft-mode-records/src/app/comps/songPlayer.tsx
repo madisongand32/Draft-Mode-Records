@@ -1,5 +1,6 @@
 import { getSongData } from "../../../lib/contentful/spotify";
 import { SpotifyPlayer } from "../../../lib/contentful/queries";
+import Image from "next/image";
 
 export default async function SongPlayer({ songId }: { songId: string }) {
   const song: SpotifyPlayer = await getSongData(songId);
@@ -12,7 +13,7 @@ export default async function SongPlayer({ songId }: { songId: string }) {
     <div>
       <h1>{song.name}</h1>
       {song.album?.images?.[0]?.url && (
-        <img src={song.album.images[0].url} alt={`${song.name} cover`} />
+        <Image src={song.album.images[0].url} alt={`${song.name} cover`} />
       )}
       <p>{song.album.name || "No description available."}</p>
 
