@@ -1,5 +1,4 @@
 import * as contentful from "contentful";
-
 // Declare environment variables
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID || "";
 const DELIVERY_TOKEN = process.env.CONTENTFUL_TOKEN || "";

@@ -193,7 +193,13 @@ export const fetchAllArtistPages = async (preview = false) => {
   }
 };
 
-export const fetchArtistPageBySlug = async ({ slug, preview = false }) => {
+export const fetchArtistPageBySlug = async ({
+  slug,
+  preview = false,
+}: {
+  slug: string;
+  preview?: boolean;
+}) => {
   try {
     const response = await getClient(preview).getEntries({
       content_type: "artistPage",

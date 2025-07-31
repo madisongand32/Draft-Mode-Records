@@ -1,10 +1,17 @@
 import { fetchArtistPageBySlug } from "../../../../lib/contentful/queries";
 import Image from "next/image";
 import ArtistPageContent from "@/app/comps/artistPageContent";
+import { draftMode } from "next/headers";
+import { contentfulLivePreview } from "@/lib/contentful-live-preview";
 
 export default async function ArtistPage({ params }) {
   const { slug } = params;
-  const artistPage = await fetchArtistPageBySlug({ slug });
+  const { isEnabled: isPreviewMode } = draftMode();
+
+  const artistPage = await fetchArtistPageBySlug({
+    slug,
+    preview: isPreviewMode,
+  });
 
   if (!artistPage) {
     return (
@@ -20,11 +27,17 @@ export default async function ArtistPage({ params }) {
 
   console.log("Artist Page:", artistPage);
 
+  const { getProps } = useContentfulInspectorMode({
+    entryId: artistPage.sys.id,
+    locale: "en-US",
+  });
+
   return (
     <main className="min-h-screen">
       <section className="artist-hero">
         <div className="relative w-full h-[75vh]">
           <Image
+            {...getProps({ fieldId: "artistImage" })}
             src={`https:${artist.fields.artistImage?.fields?.media.fields?.file?.url}`}
             alt={artist.fields.artistName}
             className="object-cover z-0 rounded-2xl border-10 border-black"
@@ -36,7 +49,12 @@ export default async function ArtistPage({ params }) {
             className="absolute inset-0 bg-opacity-40 z-10 rounded-2xl"
           />
           <div className="absolute inset-0 z-20 flex items-center justify-center text-white">
-            <h1 className="text-6xl font-bold">{artist.fields.artistName}</h1>
+            <h1
+              {...getProps({ fieldId: "artistName" })}
+              className="text-6xl font-bold"
+            >
+              {artist.fields.artistName}
+            </h1>
           </div>
         </div>
       </section>

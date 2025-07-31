@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import "@/lib/contentful/live-preview";
 import "./globals.css";
 import "./styles/index.css";
 import { Calistoga, IBM_Plex_Sans } from "next/font/google";

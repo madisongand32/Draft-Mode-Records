@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { backgroundColorMap } from "../utils/classMapping";
+import { useContentfulInspectorMode } from "@contentful/live-preview/react";
 
 // Define the props for the Contentful entry
 
@@ -14,12 +15,21 @@ const DuplexComponent = (entry) => {
   const backgroundColorClass =
     backgroundColorMap[backgroundColor] || "vinylNeutral";
 
+  // Enable inspector mode for this entry
+  const { getProps } = useContentfulInspectorMode({
+    entryId: entry.sys.id,
+    locale: "en-US",
+  });
+
   return (
-    <section className={`p-10 ${backgroundColorClass}`}>
+    <section
+      {...getProps({ fieldId: "backgroundColor" })}
+      className={`p-10 ${backgroundColorClass}`}
+    >
       <div className="flex gap-5 justify-between items-center">
         <div>
           test
-          <img src={imgSrc} />
+          <img {...getProps({ fieldId: "artistFeatureImage" })} src={imgSrc} />
         </div>
       </div>
     </section>
