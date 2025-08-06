@@ -181,6 +181,17 @@ interface DuplexFields {
 
 export type DuplexProps = Entry<DuplexFields>;
 
+interface NewSongsFields {
+  contentTypeId: "newSongsComponent";
+  fields: {
+    imageAlignment?: EntryFields.Boolean;
+    songsToFeature: Album | EntryReference;
+    songsToShow: contentful.EntryFields.Integer;
+  };
+}
+
+export type NewSongsProps = Entry<NewSongsFields>;
+
 export const fetchAllArtistPages = async (preview = false) => {
   try {
     const response = await getClient(preview).getEntries({

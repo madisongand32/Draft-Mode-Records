@@ -48,8 +48,6 @@ export default async function AlbumPage({ params }) {
         {album.fields.songsInAlbum?.map((songEntry, index) => {
           const songFields = songEntry?.fields;
           const songId = songFields?.spotifyPlayer;
-          console.log("Song Entry:", songEntry);
-          console.log("Song ID:", songId);
           if (!songId) return null; // skip if no ID
 
           return (

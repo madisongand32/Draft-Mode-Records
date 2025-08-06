@@ -4,7 +4,7 @@ import { backgroundColorMap } from "../../utils/classMapping";
 // Define the props for the Contentful entry
 
 const DuplexComponent = (entry, page) => {
-  const { duplexInspectorProps, artistInspectorProps } = entry;
+  const { inspectorProps, artistInspectorProps } = entry;
   const imgSrc = entry.fields.artistFeatureImage?.fields?.media.fields?.file
     ?.url
     ? `https:${entry.fields.artistFeatureImage?.fields?.media.fields?.file?.url}`
@@ -16,7 +16,7 @@ const DuplexComponent = (entry, page) => {
 
   const artist = entry.page.fields.artist;
 
-  console.log(artist);
+  console.log("duplex page", entry.page);
 
   // Default to flex-col on mobile, flex-row or flex-row-reverse on md+
   const imageAlignmentClass = entry.fields.imageAlignment
@@ -24,13 +24,13 @@ const DuplexComponent = (entry, page) => {
     : "flex-col md:!flex-row";
 
   return (
-    <section className="py-20">
+    <div className="py-20">
       <div
         className={`flex gap-10 md:gap-20 justify-between items-center ${imageAlignmentClass}`}
       >
         <div className="featured-image-container">
           <img
-            {...duplexInspectorProps({ fieldId: "artistFeatureImage" })}
+            {...inspectorProps({ fieldId: "artistFeatureImage" })}
             src={imgSrc}
             alt={entry.fields.altText || "Artist Feature Image"}
             className="shadow-lg"
@@ -54,7 +54,7 @@ const DuplexComponent = (entry, page) => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

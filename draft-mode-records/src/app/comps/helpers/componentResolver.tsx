@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 // Dynamically import components based on content type
 const componentMap: Record<string, React.ComponentType<unknown>> = {
   duplexComponent: dynamic(() => import("../../artist/comps/duplex")),
+  newSongsComponent: dynamic(() => import("../../artist/comps/featuredSongs")),
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,16 +34,14 @@ const ComponentResolver = React.forwardRef((props: any, ref) => {
     : () => ({});
 
   return (
-    <div className="max-h-fit">
-      <Component
-        {...field}
-        duplexInspectorProps={inspectorProps}
-        artistInspectorProps={artistInspectorProps}
-        page={page}
-        {...rest}
-        ref={ref}
-      />
-    </div>
+    <Component
+      {...field}
+      inspectorProps={inspectorProps}
+      artistInspectorProps={artistInspectorProps}
+      page={page}
+      {...rest}
+      ref={ref}
+    />
   );
 });
 

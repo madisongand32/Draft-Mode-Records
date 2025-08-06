@@ -4,9 +4,11 @@ import { draftMode } from "next/headers";
 
 export default async function ArtistPage({ params }) {
   const { slug } = params;
+  const { isEnabled } = await draftMode();
+
   const artistPage = await fetchArtistPageBySlug({
     slug,
-    preview: draftMode().isEnabled,
+    preview: isEnabled,
   });
 
   if (!artistPage) {
