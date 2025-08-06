@@ -22,6 +22,7 @@ const previewClient = contentful.createClient({
   accessToken: PREVIEW_TOKEN,
   environment: ENVIRONMENT,
   host: "preview.contentful.com",
+  includeContentSourceMaps: true,
 });
 
 // Export a function to select the appropriate client

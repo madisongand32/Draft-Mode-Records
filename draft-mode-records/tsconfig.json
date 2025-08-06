@@ -35,7 +35,9 @@
     "src/app/album/[slug]/page.jsx",
     "src/app/album/comps/albumOfTheMonth.jsx",
     "src/app/artist/[slug]/page.jsx",
-    "src/app/comps/duplex.jsx"
+    "src/app/artist/comps/duplex.jsx",
+    "src/app/comps/helpers/componentResolver.jsx",
+    "src/app/comps/artistPageContent.tsx"
   ],
   "exclude": ["node_modules"]
 }

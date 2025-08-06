@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import "@/lib/contentful/live-preview";
 import "./globals.css";
 import "./styles/index.css";
 import { Calistoga, IBM_Plex_Sans } from "next/font/google";
+import LivePreviewProvider from "./utils/livePreviewProvider";
+import { draftMode } from "next/headers";
 
 // Font Families
 const calistoga = Calistoga({ weight: "400", subsets: ["latin"] });
@@ -15,11 +16,12 @@ export const metadata: Metadata = {
     "A mock record label website for the Content Authoring Accelerator workshop.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { isEnabled } = await draftMode();
   return (
     <html lang="en">
       <head>
@@ -28,7 +30,9 @@ export default function RootLayout({
       <body>
         <Header />
         <main className={`min-h-screen px-10 ${ibmPlex.className}`}>
-          {children}
+          <LivePreviewProvider isEnabled={isEnabled}>
+            {children}
+          </LivePreviewProvider>
         </main>
         <Footer />
       </body>

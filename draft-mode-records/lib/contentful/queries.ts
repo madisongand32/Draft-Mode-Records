@@ -176,7 +176,6 @@ interface DuplexFields {
     featuredArtist?: Artist | EntryReference;
     artistFeatureImage?: AssetWrapper | EntryReference;
     imageAlignment?: EntryFields.Boolean;
-    backgroundColor?: BackgroundColor;
   };
 }
 
