@@ -29,7 +29,9 @@ export default async function RootLayout({
       </head>
       <body>
         <Header />
-        <main className={`min-h-screen px-10 ${ibmPlex.className}`}>
+        <main
+          className={`min-h-screen px-10 overflow-x-hidden ${ibmPlex.className}`}
+        >
           <LivePreviewProvider isEnabled={isEnabled}>
             {children}
           </LivePreviewProvider>

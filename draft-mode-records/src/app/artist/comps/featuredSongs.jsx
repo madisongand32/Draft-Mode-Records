@@ -19,9 +19,16 @@ const FeaturedSongs = (entry, page) => {
     : "flex-col md:!flex-row";
 
   return (
-    <div className={`py-20 w-full ${backgroundColorClass}`}>
+    <div
+      className={`py-20 -mx-20 bg-${backgroundColorClass} ${
+        backgroundColorClass === "vinylDark" ||
+        backgroundColorClass === "vinylRed"
+          ? "text-white"
+          : ""
+      }`}
+    >
       <div
-        className={`flex gap-10 md:gap-20 justify-between items-center ${imageAlignmentClass}`}
+        className={`px-20 flex gap-10 md:gap-20 justify-between items-center ${imageAlignmentClass}`}
       >
         <div className="featured-image-container w-1/4">
           <img
@@ -38,7 +45,8 @@ const FeaturedSongs = (entry, page) => {
             ?.map((songEntry, index) => {
               const songFields = songEntry?.fields;
               const songId = songFields?.spotifyPlayer;
-              if (!songId) return null; // skip if no ID
+              const songName = songFields?.songTitle;
+              if (!songId) return null;
 
               return (
                 <div
@@ -46,13 +54,18 @@ const FeaturedSongs = (entry, page) => {
                   className="list-of-songs w-full my-5"
                 >
                   <iframe
-                    title={`Spotify Song Player - ${songFields?.songTitle}`}
+                    title={`Spotify Song Player - ${songName}`}
                     src={`https://open.spotify.com/embed/track/${songId}`}
-                    width="100%"
+                    width="75%"
                     height="152"
                     frameBorder="0"
                     allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                     loading="lazy"
+                    className={`${
+                      backgroundColorClass === "vinylRed"
+                        ? "shadow-xl rounded-lg"
+                        : ""
+                    }`}
                   />
                 </div>
               );

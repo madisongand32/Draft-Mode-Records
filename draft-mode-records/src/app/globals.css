@@ -1,14 +1,15 @@
+@theme {
+  --color-vinylDark: #282828;
+  --color-vinylOrange: #ef874a;
+  --color-vinylNeutral: #d5c1a1;
+  --color-vinylRed: #99201a;
+}
+
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme {
-  --color-vinylDark: #282828;
-  --color-vinylOrange: #ef874a;
-  --color-vinylNeutral: #d5c1a1;
 }
 
 /* @theme inline {

@@ -16,17 +16,15 @@ const DuplexComponent = (entry, page) => {
 
   const artist = entry.page.fields.artist;
 
-  console.log("duplex page", entry.page);
-
   // Default to flex-col on mobile, flex-row or flex-row-reverse on md+
   const imageAlignmentClass = entry.fields.imageAlignment
     ? "flex-col md:!flex-row-reverse"
     : "flex-col md:!flex-row";
 
   return (
-    <div className="py-20">
+    <div className={`py-20 -mx-20 bg-${backgroundColorClass}`}>
       <div
-        className={`flex gap-10 md:gap-20 justify-between items-center ${imageAlignmentClass}`}
+        className={`flex px-20 gap-10 md:gap-20 justify-between items-center ${imageAlignmentClass}`}
       >
         <div className="featured-image-container">
           <img

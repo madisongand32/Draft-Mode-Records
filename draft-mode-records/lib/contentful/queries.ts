@@ -10,19 +10,11 @@ export type EntryReference = {
   };
 };
 
-export type BackgroundColor = "vinylDark" | "vinylOrange" | "vinylNeutral";
-
-interface DuplexComponentFields {
-  contentTypeId: "duplexComponent";
-  fields: {
-    featuredArtist: Artist;
-    artistFeatureImage: AssetWrapper;
-    imageAlignment: boolean;
-    backgroundColor: BackgroundColor;
-  };
-}
-
-export type DuplexComponentProps = Entry<DuplexComponentFields>;
+export type BackgroundColor =
+  | "vinylDark"
+  | "vinylOrange"
+  | "vinylNeutral"
+  | "vinylRed";
 
 interface FeaturedAlbumFields {
   contentTypeId: "featuredAlbum";
@@ -176,6 +168,7 @@ interface DuplexFields {
     featuredArtist?: Artist | EntryReference;
     artistFeatureImage?: AssetWrapper | EntryReference;
     imageAlignment?: EntryFields.Boolean;
+    backgroundColor?: BackgroundColor;
   };
 }
 
@@ -187,6 +180,7 @@ interface NewSongsFields {
     imageAlignment?: EntryFields.Boolean;
     songsToFeature: Album | EntryReference;
     songsToShow: contentful.EntryFields.Integer;
+    backgroundColor?: BackgroundColor;
   };
 }
 
